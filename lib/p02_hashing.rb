@@ -4,6 +4,7 @@ end
 
 class Array
   def hash
+
   end
 end
 
