@@ -71,7 +71,7 @@ class IntSet
 end
 
 class ResizingIntSet
-  attr_accessor :count
+  attr_accessor :count, :num_buckets
 
   def initialize(num_buckets = 20)
     @store = Array.new(num_buckets) { Array.new }
@@ -83,6 +83,9 @@ class ResizingIntSet
       self[num] << num
       self.count += 1
       true
+    end
+    if self.count > self.num_buckets
+      self.resize!
     end
 
   end
@@ -114,14 +117,14 @@ class ResizingIntSet
 
   def resize!
     dupped = @store.flatten
-    if dupped.length > num_buckets
     # prev_num_buckets = count
-      arr = ResizingIntSet.new(@num_buckets * 2)
+    if dupped.length > self.num_buckets
+      @store = Array.new(self.num_buckets *= 2) {Array.new}
       dupped.each do |el|
-        arr[el] << el
+        @store[el] << el
       end
     end
-    arr
+    @store
   end
 
   def [](num)
